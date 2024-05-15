@@ -1,7 +1,6 @@
 ﻿namespace FlightBookingApp.Application
 {
-    public class Class1
+    public static class ConfigureServices
     {
-
     }
 }

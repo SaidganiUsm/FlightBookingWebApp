@@ -6,4 +6,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FlightBookingApp.Application\FlightBookingApp.Application.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Data\Configs" />
+    <Folder Include="Interceptor\" />
+    <Folder Include="Persistence" />
+	<Folder Include="Repositories" />
+	<Folder Include="Services" />
+  </ItemGroup>
+
 </Project>
