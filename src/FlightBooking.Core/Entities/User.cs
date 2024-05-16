@@ -1,8 +1,8 @@
-﻿using FlightBookingApp.Core.Common;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace FlightBookingApp.Core.Entities
 {
-    public class User
+    public class User : IdentityUser<int>
     {
         public string? FirstName { get; set; }
 

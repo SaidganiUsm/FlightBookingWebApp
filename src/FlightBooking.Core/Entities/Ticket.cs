@@ -1,12 +1,11 @@
 ﻿using FlightBookingApp.Core.Common;
+using System;
 
 namespace FlightBookingApp.Core.Entities
 {
     public class Ticket : BaseAuditableEntity
     {
-        public double Price { get; set; }
-
-        public DateTime DateOfCreation { get; set; }
+        public double? Price { get; set; }
 
         public int FlightId { get; set; }
 
@@ -18,6 +17,6 @@ namespace FlightBookingApp.Core.Entities
 
         public int RankId { get; set; }
 
-        public TicketType? Rank { get; set; }
+        public Rank? Rank { get; set; }
     }
 }

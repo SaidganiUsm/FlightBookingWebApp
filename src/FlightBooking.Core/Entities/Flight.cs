@@ -12,12 +12,10 @@ namespace FlightBookingApp.Core.Entities
 
         public string? DestinationPoint { get; set; }
 
-        public DateTime DateOfCreation { get; set; }
-
         public int TotalTickets { get; set; }
 
         public int TicketsAvailable { get; set; }
 
-        public ICollection<TicketType>? TicketTypes { get; set; }
+        public ICollection<Ticket>? Tickets { get; set; }
     }
 }
