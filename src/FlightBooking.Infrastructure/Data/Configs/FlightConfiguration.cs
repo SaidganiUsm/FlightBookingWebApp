@@ -7,23 +7,17 @@ namespace FlightBookingApp.Infrastructure.Data.Configs
     {
         public void Configure(EntityTypeBuilder<Flight> builder)
         {
-            builder.Property(r => r.DeparturePoint)
-                .HasMaxLength(50)
-                .IsRequired(true);
+            builder.HasOne(f => f.DepartureLocation)
+                .WithMany()
+                .HasForeignKey(f => f.DepartureLocationId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(r => r.DestinationPoint)
-                .HasMaxLength(50)
-                .IsRequired(true);
-
-            builder.HasOne(l => l.DestinationPoint)
-                .WithMany(l => l.Flights)
-                .HasForeignKey(l => l.DestinationPointId)
-                .IsRequired(true);
-
-            builder.HasOne(l => l.DeparturePoint)
-                .WithMany(l => l.Flights)
-                .HasForeignKey(l =>l.DeparturePointId)
-                .IsRequired(true);
+            builder.HasOne(f => f.DestinationLocation)
+                .WithMany()
+                .HasForeignKey(f => f.DestinationLocationId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(r => r.StartDateTime)
                 .HasConversion(v => v, v => DateTime

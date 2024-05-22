@@ -12,6 +12,6 @@ namespace FlightBookingApp.Core.Entities
 
         public string? Address { get; set; }
 
-        public ICollection<Flight>? Flights { get; set; }
+        public Flight? Flight { get; set; }
     }
 }

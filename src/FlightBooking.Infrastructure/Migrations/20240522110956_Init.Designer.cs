@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightBookingApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240516085926_Init")]
+    [Migration("20240522110956_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -36,15 +36,11 @@ namespace FlightBookingApp.Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeparturePoint")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("DepartureLocationId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DestinationPoint")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("DestinationLocationId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
@@ -63,7 +59,54 @@ namespace FlightBookingApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartureLocationId");
+
+                    b.HasIndex("DestinationLocationId");
+
                     b.ToTable("Flights");
+                });
+
+            modelBuilder.Entity("FlightBookingApp.Core.Entities.Location", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FlightId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlightId");
+
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("FlightBookingApp.Core.Entities.Rank", b =>
@@ -337,6 +380,34 @@ namespace FlightBookingApp.Infrastructure.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FlightBookingApp.Core.Entities.Flight", b =>
+                {
+                    b.HasOne("FlightBookingApp.Core.Entities.Location", "DepartureLocation")
+                        .WithMany()
+                        .HasForeignKey("DepartureLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FlightBookingApp.Core.Entities.Location", "DestinationLocation")
+                        .WithMany()
+                        .HasForeignKey("DestinationLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DepartureLocation");
+
+                    b.Navigation("DestinationLocation");
+                });
+
+            modelBuilder.Entity("FlightBookingApp.Core.Entities.Location", b =>
+                {
+                    b.HasOne("FlightBookingApp.Core.Entities.Flight", "Flight")
+                        .WithMany()
+                        .HasForeignKey("FlightId");
+
+                    b.Navigation("Flight");
+                });
+
             modelBuilder.Entity("FlightBookingApp.Core.Entities.Ticket", b =>
                 {
                     b.HasOne("FlightBookingApp.Core.Entities.Flight", "Flight")
@@ -346,7 +417,7 @@ namespace FlightBookingApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("FlightBookingApp.Core.Entities.Rank", "Rank")
-                        .WithMany("Tickets")
+                        .WithMany()
                         .HasForeignKey("RankId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -416,11 +487,6 @@ namespace FlightBookingApp.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("FlightBookingApp.Core.Entities.Flight", b =>
-                {
-                    b.Navigation("Tickets");
-                });
-
-            modelBuilder.Entity("FlightBookingApp.Core.Entities.Rank", b =>
                 {
                     b.Navigation("Tickets");
                 });
