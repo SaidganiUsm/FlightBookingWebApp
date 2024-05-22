@@ -13,11 +13,6 @@ namespace FlightBookingApp.Infrastructure.Data.Configs
                 .HasForeignKey(t => t.UserId)
                 .IsRequired(true);
 
-            builder.HasOne(t => t.Rank)
-                .WithMany(t => t.Tickets)
-                .HasForeignKey(t => t.RankId)
-                .IsRequired(true);
-
             builder.HasOne(t => t.Flight)
                 .WithMany(t => t.Tickets)
                 .HasForeignKey(t => t.FlightId)

@@ -8,9 +8,13 @@ namespace FlightBookingApp.Core.Entities
 
         public DateTime EndDateTime { get; set; }
 
-        public string? DeparturePoint { get; set; }
+        public int DeparturePointId { get; set; }
 
-        public string? DestinationPoint { get; set; }
+        public Location? DeparturePoint { get; set; }
+
+        public int DestinationPointId { get; set; }
+
+        public Location? DestinationPoint { get; set; }
 
         public int TotalTickets { get; set; }
 

@@ -45,6 +45,8 @@ namespace FlightBookingApp.Infrastructure.Persistence
 
         public virtual DbSet<Rank> TicketTypes => Set<Rank>();
 
+        public virtual DbSet<Location> Locations => Set<Location>();
+
         protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
