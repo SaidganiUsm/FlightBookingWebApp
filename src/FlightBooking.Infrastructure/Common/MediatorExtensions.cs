@@ -12,7 +12,7 @@ namespace FlightBookingApp.Infrastructure.Common
         )
         {
             var entities = dbContext.ChangeTracker
-                .Entries<BaseEntitiy>()
+                .Entries<BaseEntity>()
                 .Where(e => e.Entity.DomainEvents.Any())
                 .Select(e => e.Entity);
 
