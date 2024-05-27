@@ -135,7 +135,9 @@ namespace FlightBookingApp.Application.Features.Auth.Commands
 
             if (result.Succeeded)
             {
-                 return new RegisterResponse
+                await _userManager.AddToRoleAsync(user, "user");
+
+                return new RegisterResponse
                 {
                     Message = "User created successfully!",
                     IsSuccess = true,
