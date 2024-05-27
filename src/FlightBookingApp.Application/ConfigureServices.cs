@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using FlightBookingApp.Application.Common.Options;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,8 @@ namespace FlightBookingApp.Application
             IConfiguration configuration
         )
         {
+            services.Configure<AppOptions>(configuration.GetSection(AppOptions.App));
+
             return services;
         }
     }
