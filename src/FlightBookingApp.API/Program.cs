@@ -2,6 +2,8 @@ using NLog;
 using NLog.Web;
 using FlightBookingApp.Application;
 using FlightBookingApp.Infrastructure;
+using FlightBookingApp.API.Services;
+using FlightBookingApp.Application.Common.Interfaces.Services;
 
 internal class Program
 {
@@ -24,6 +26,8 @@ internal class Program
             builder.Logging.ClearProviders();
             builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             builder.Host.UseNLog();
+
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
