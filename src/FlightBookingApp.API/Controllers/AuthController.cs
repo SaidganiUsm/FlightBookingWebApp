@@ -1,7 +1,6 @@
 ﻿using FlightBookingApp.Application.Common.Interfaces.Services;
 using FlightBookingApp.Application.Features.Auth.Responses.Login;
 using FlightBookingApp.Application.Features.Auth.Responses.Register;
-using FlightBookingApp.Application.Features.Auth.Responses.ResetPassword;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlightBookingApp.API.Controllers
@@ -32,51 +31,6 @@ namespace FlightBookingApp.API.Controllers
             }
 
             var result = await _identityService.RegisterUserAsync(model);
-
-            if (!result.IsSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("confirm-email")]
-        public async Task<IActionResult> ConfirmEmailAsync(string userId, string token)
-        {
-            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
-                return NotFound();
-
-            var result = await _identityService.ConfirmUserEmailAsync(userId, token);
-
-            if (!result.IsSuccess)
-                return BadRequest(result);
-
-            return Ok("Confirmed");
-        }
-
-        [HttpPost("forget-password")]
-        public async Task<IActionResult> ForgetPassword(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-                return NotFound();
-
-            var result = await _identityService.ForgetPasswordAsync(email);
-
-            if (!result.IsSuccess)
-                return BadRequest(result);
-
-            return Ok(result);
-        }
-
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Some properties are not valid.");
-            }
-
-            var result = await _identityService.ResetPasswordAsync(model);
 
             if (!result.IsSuccess)
                 return BadRequest(result);
