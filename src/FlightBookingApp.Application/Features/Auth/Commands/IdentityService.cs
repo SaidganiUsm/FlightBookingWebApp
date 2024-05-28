@@ -103,7 +103,7 @@ namespace FlightBookingApp.Application.Features.Auth.Commands
                 issuer: _authSettingsOptions.Issuer,
                 audience: _authSettingsOptions.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddDays(2),
+                expires: DateTime.Now.AddDays(_authSettingsOptions.TokenExpirationDays),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
 

@@ -51,15 +51,6 @@ namespace FlightBookingApp.Infrastructure.Persistence
 		{
 			base.OnModelCreating(builder);
 
-			builder
-				.Entity<User>()
-				.Ignore(u => u.AccessFailedCount)
-				.Ignore(u => u.LockoutEnabled)
-				.Ignore(u => u.LockoutEnd)
-				.Ignore(u => u.TwoFactorEnabled)
-				.Ignore(u => u.PhoneNumberConfirmed)
-                .Ignore(u => u.EmailConfirmed);
-
 			builder.Entity<User>().ToTable("Users");
 			builder.Entity<Role>().ToTable("Roles");
 			builder.Entity<UserRole>().ToTable("UserRoles");
