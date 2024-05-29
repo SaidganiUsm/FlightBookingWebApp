@@ -8,6 +8,5 @@
         public string Audience { get; set; }
         public int AccessTokenExpirationInMinutes { get; set; }
         public int RefreshTokenExpirationInDays { get; set; }
-        public int TokenExpirationDays {  get; set; }
     }
 }
