@@ -64,7 +64,7 @@ namespace FlightBookingApp.Infrastructure.Persistence
             // Default roles
             var roles = new List<Role>
             {
-                new Role { Name = "Administrator", },
+                new Role { Name = "Admin", },
                 new Role { Name = "User", },
             };
 
@@ -101,7 +101,7 @@ namespace FlightBookingApp.Infrastructure.Persistence
                     switch (user.UserName)
                     {
                         case "admin@localhost.com":
-                            var adminRole = roles.Find(r => r.Name == "Administrator");
+                            var adminRole = roles.Find(r => r.Name == "Admin");
                             if (adminRole != null)
                             {
                                 await _userManager.AddToRolesAsync(

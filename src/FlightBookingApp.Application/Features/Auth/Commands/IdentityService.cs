@@ -5,6 +5,7 @@ using FlightBookingApp.Application.Features.Auth.Responses.Register;
 using FlightBookingApp.Application.Features.Auth.Responses.Token;
 using FlightBookingApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -48,7 +49,9 @@ namespace FlightBookingApp.Application.Features.Auth.Commands
                     IsSuccess = false,
                 };
             }
-            var user = await _userManager.FindByEmailAsync(userModel.Email);
+            var user = await _userManager.Users.FirstOrDefaultAsync(
+                u => u.Email == userModel.Email && !u.IsDeleted
+            );
 
             if (user is null)
             {
