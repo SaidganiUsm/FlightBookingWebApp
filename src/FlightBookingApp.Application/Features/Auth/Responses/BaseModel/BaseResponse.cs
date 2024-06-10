@@ -1,6 +1,6 @@
 ﻿namespace FlightBookingApp.Application.Features.Auth.Responses.BaseModel
 {
-    public class BaseResponse
+    public abstract class BaseResponse
     {
         public string? Message { get; set; }
 
