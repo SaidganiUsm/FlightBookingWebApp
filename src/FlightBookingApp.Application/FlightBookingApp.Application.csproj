@@ -11,7 +11,9 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Features\Flight" />
+    <Folder Include="Features\Flights\User\Command\" />
+    <Folder Include="Features\Flights\User\Profiles\" />
+    <Folder Include="Features\Flights\User\Query\" />
   </ItemGroup>
 	
   <ItemGroup>
