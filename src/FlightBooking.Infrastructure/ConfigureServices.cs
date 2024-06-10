@@ -1,7 +1,9 @@
-﻿using FlightBookingApp.Core.Entities;
+﻿using FlightBookingApp.Application.Common.Interfaces.Repositories;
+using FlightBookingApp.Core.Entities;
 using FlightBookingApp.Infrastructure.Common.Options;
 using FlightBookingApp.Infrastructure.Interceptor;
 using FlightBookingApp.Infrastructure.Persistence;
+using FlightBookingApp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -79,7 +81,7 @@ namespace FlightBookingApp.Infrastructure
                                 && path.StartsWithSegments(configuration["SignalR:HubStartPath"])
                             )
                             {
-                                context.Token = accessToken;
+                                context.Token = accessToken;    
                             }
 
                             return Task.CompletedTask;
@@ -93,6 +95,8 @@ namespace FlightBookingApp.Infrastructure
             services.Configure<UsersSeedingData>(usersSeedingData);
 
             services.AddScoped<ApplicationDbContextInitializer>();
+
+            services.AddScoped<IFlightRepository, FlightRepository>();
 
             return services;
         }
