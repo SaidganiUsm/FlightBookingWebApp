@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using FlightBookingApp.Application.Common.Interfaces.Repositories;
+using FlightBookingApp.Core.Entities;
+using MediatR;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
 {
@@ -14,12 +17,25 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
 
     public class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand, CreateFlightResponse>
     {
+        private readonly IFlightRepository _flightRepository;
+        private readonly IMapper _mapper;
+
+        public CreateFlightCommandHandler(IFlightRepository flightRepository, IMapper mapper)
+        {
+            _flightRepository = flightRepository;
+            _mapper = mapper;
+        }
+
         public async Task<CreateFlightResponse> Handle(
             CreateFlightCommand request,
             CancellationToken cancellationToken
         )
         {
-            throw new NotImplementedException();
+            var newFlight = _mapper.Map<Flight>( request );
+
+            var result = await _flightRepository.AddAsync(newFlight);
+
+            return new CreateFlightResponse { Id = result.Id};
         }
     }
 }
