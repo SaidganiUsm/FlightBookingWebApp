@@ -2,6 +2,7 @@
 using FlightBookingApp.Application.Common.Interfaces.Repositories;
 using FlightBookingApp.Application.Features.Flights.Admin.Command.BaseValidator;
 using FlightBookingApp.Core.Entities;
+using FlightBookingApp.Core.Enums;
 using MediatR;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
@@ -19,16 +20,19 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
     {
         private readonly IFlightRepository _flightRepository;
         private readonly ILocationRepository _locationRepository;
+        private readonly IFlightStatusRepository _flightStatusRepository;
         private readonly IMapper _mapper;
 
         public CreateFlightCommandHandler(
             IFlightRepository flightRepository, 
             ILocationRepository locationRepository,
+            IFlightStatusRepository flightStatusRepository,
             IMapper mapper
         )
         {
             _flightRepository = flightRepository;
             _locationRepository = locationRepository;
+            _flightStatusRepository = flightStatusRepository;
             _mapper = mapper;
         }
 
@@ -39,6 +43,11 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
         {
             var departure = await _locationRepository.GetAsync(
                 l => l.Id == request.DepartureLocationId,
+                cancellationToken: cancellationToken
+            );
+
+            var status = await _flightStatusRepository.GetAsync(
+                s => s.Name == FlightStatuses.Scheduled.ToString(),
                 cancellationToken: cancellationToken
             );
 
@@ -53,6 +62,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
                 EndDateTime = request.EndDateTime,
                 DepartureLocation = departure,
                 DestinationLocation = destination,
+                FlightStatus = status,
                 TotalTickets = request.TotalTickets,
                 TicketsAvailable = request.TotalTickets
             };
