@@ -1,4 +1,4 @@
-﻿using FlightBookingApp.Core.Entities;
+﻿using FlightBookingApp.Application.Common.DTOs;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetbyId
 {
@@ -7,8 +7,8 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetbyId
         public int Id { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
-        public Location? DepartureLocation { get; set; }
-        public Location? DestinationLocation { get; set; }
+        public LocationDto? DepartureLocation { get; set; }
+        public LocationDto? DestinationLocation { get; set; }
         public int TotalTickets { get; set; }
         public int TicketsAvailable { get; set; }
     }

@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetAll
 {
-    public class GetAllFlightsQuery : IRequest<GetListResponseDto<GetAllFlightsRespnse>>
+    public class GetAllFlightsQuery : IRequest<GetListResponseDto<GetAllFlightsResponse>>
     {
         public PageRequest PageRequest { get; set; }
     }
 
     public class GetAllFlightsQueryHandler : 
-        IRequestHandler<GetAllFlightsQuery, GetListResponseDto<GetAllFlightsRespnse>>
+        IRequestHandler<GetAllFlightsQuery, GetListResponseDto<GetAllFlightsResponse>>
     {
         private readonly IFlightRepository _flightRepository;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetAll
             _mapper = mapper;
         }
 
-        public async Task<GetListResponseDto<GetAllFlightsRespnse>> Handle(
+        public async Task<GetListResponseDto<GetAllFlightsResponse>> Handle(
             GetAllFlightsQuery request, 
             CancellationToken cancellationToken
         )
@@ -42,7 +42,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetAll
                 cancellationToken: cancellationToken
                 );
 
-            var response = _mapper.Map<GetListResponseDto<GetAllFlightsRespnse>>(flights);
+            var response = _mapper.Map<GetListResponseDto<GetAllFlightsResponse>>(flights);
 
             return response;
         }

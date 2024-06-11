@@ -11,7 +11,5 @@ namespace FlightBookingApp.Application.Common.DTOs
         public string? Country { get; set; }
 
         public string? Address { get; set; }
-
-        public Flight? Flight { get; set; }
     }
 }

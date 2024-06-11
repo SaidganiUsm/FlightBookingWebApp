@@ -14,12 +14,15 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Profiles
     {
         public MappingProfile() 
         {
-            CreateMap<IPaginate<Flight>, GetListResponseDto<GetAllFlightsRespnse>>().ReverseMap();
+            CreateMap<Flight, GetAllFlightsResponse>().ReverseMap();
+            CreateMap<IPaginate<Flight>, GetListResponseDto<GetAllFlightsResponse>>().ReverseMap();
             CreateMap<Flight, GetFlightResponse>().ReverseMap();
 
             CreateMap<Flight, CreateFlightResponse>().ReverseMap();
             CreateMap<Flight, UpdateFlightResponse>().ReverseMap();
             CreateMap<Flight, DeleteFlightResponse>().ReverseMap();
+
+            CreateMap<UpdateFlightCommand, Flight>().ReverseMap();
         }
     }
 }

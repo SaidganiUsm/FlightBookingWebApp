@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using FlightBookingApp.Application.Common.Interfaces.Repositories;
+using FlightBookingApp.Application.Features.Flights.Admin.Command.BaseValidator;
 using FlightBookingApp.Core.Entities;
 using MediatR;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
 {
-    public class CreateFlightCommand : IRequest<CreateFlightResponse>
+    public class CreateFlightCommand : IRequest<CreateFlightResponse>, IFlightCommandsValidator
     {
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public int DepartureLocationId { get; set; }
         public int DestinationLocationId { get; set; }
         public int TotalTickets { get; set; }
-        public int TicketsAvailable { get; set; }
     }
 
     public class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand, CreateFlightResponse>
@@ -54,7 +54,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
                 DepartureLocation = departure,
                 DestinationLocation = destination,
                 TotalTickets = request.TotalTickets,
-                TicketsAvailable = request.TicketsAvailable
+                TicketsAvailable = request.TotalTickets
             };
 
             var result = await _flightRepository.AddAsync(newFlight);
