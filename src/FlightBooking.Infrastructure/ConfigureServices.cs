@@ -98,6 +98,7 @@ namespace FlightBookingApp.Infrastructure
 
             services.AddScoped<IFlightRepository, FlightRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IFlightStatusRepository, FlightStatusRepository>();
 
             return services;
         }
