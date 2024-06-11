@@ -13,6 +13,12 @@ namespace FlightBookingApp.Infrastructure.Data.Configs
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(l => l.FlightStatus)
+                .WithMany(ls => ls.Flights)
+                .HasForeignKey(l => l.FlightStatusId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasOne(f => f.DestinationLocation)
                 .WithMany()
                 .HasForeignKey(f => f.DestinationLocationId)
