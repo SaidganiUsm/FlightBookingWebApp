@@ -18,11 +18,17 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
     public class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand, CreateFlightResponse>
     {
         private readonly IFlightRepository _flightRepository;
+        private readonly ILocationRepository _locationRepository;
         private readonly IMapper _mapper;
 
-        public CreateFlightCommandHandler(IFlightRepository flightRepository, IMapper mapper)
+        public CreateFlightCommandHandler(
+            IFlightRepository flightRepository, 
+            ILocationRepository locationRepository,
+            IMapper mapper
+        )
         {
             _flightRepository = flightRepository;
+            _locationRepository = locationRepository;
             _mapper = mapper;
         }
 
@@ -31,11 +37,29 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
             CancellationToken cancellationToken
         )
         {
-            var newFlight = _mapper.Map<Flight>( request );
+            var departure = await _locationRepository.GetAsync(
+                l => l.Id == request.DepartureLocationId,
+                cancellationToken: cancellationToken
+            );
+
+            var destination = await _locationRepository.GetAsync(
+                l => l.Id == request.DestinationLocationId,
+                cancellationToken: cancellationToken
+            );
+
+            var newFlight = new Flight
+            {
+                StartDateTime = request.StartDateTime,
+                EndDateTime = request.EndDateTime,
+                DepartureLocation = departure,
+                DestinationLocation = destination,
+                TotalTickets = request.TotalTickets,
+                TicketsAvailable = request.TicketsAvailable
+            };
 
             var result = await _flightRepository.AddAsync(newFlight);
 
-            return new CreateFlightResponse { Id = result.Id};
+            return new CreateFlightResponse { Id = result.Id };
         }
     }
 }

@@ -5,6 +5,7 @@ using FlightBookingApp.Infrastructure;
 using FlightBookingApp.API.Services;
 using FlightBookingApp.Application.Common.Interfaces.Services;
 using Microsoft.OpenApi.Models;
+using FlightBookingApp.Infrastructure.Persistence;
 
 internal class Program
 {
@@ -85,6 +86,12 @@ internal class Program
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                using var scope = app.Services.CreateScope();
+                var initialiser =
+                    scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+                await initialiser.InitialiseAsync();
+                await initialiser.SeedAsync();
             }
 
             app.UseHttpsRedirection();

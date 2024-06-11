@@ -124,6 +124,72 @@ namespace FlightBookingApp.Infrastructure.Persistence
                 }
             }
 
+            if (!_context.Locations.Any())
+            {
+                var locations = new List<Location>
+                {
+                    new Location { 
+                        City = "Tashkent", 
+                        State = "1", 
+                        Country = "Uzbekistan", 
+                        Address = "Central Tashkent" 
+                    },
+                    new Location { 
+                        City = "Samarkand", 
+                        State = "2", 
+                        Country = "Uzbekistan", 
+                        Address = "Historical Samarkand" 
+                    },
+                    new Location { 
+                        City = "Bukhara", 
+                        State = "3", 
+                        Country = "Uzbekistan", 
+                        Address = "Old Bukhara" 
+                    },
+                    new Location { 
+                        City = "Khiva", 
+                        State = "4", Country = "Uzbekistan", Address = "Ancient Khiva" },
+                    new Location { 
+                        City = "Andijan", 
+                        State = "5", 
+                        Country = "Uzbekistan", 
+                        Address = "Andijan City Center" 
+                    },
+                    new Location { 
+                        City = "Namangan", 
+                        State = "6", 
+                        Country = "Uzbekistan", 
+                        Address = "Namangan Downtown" 
+                    },
+                    new Location { 
+                        City = "Fergana", 
+                        State = "7", 
+                        Country = "Uzbekistan", 
+                        Address = "Fergana Valley" 
+                    },
+                    new Location { 
+                        City = "Nukus", 
+                        State = "8", 
+                        Country = "Uzbekistan", 
+                        Address = "Nukus City" 
+                    },
+                    new Location { 
+                        City = "Termez", 
+                        State = "9", 
+                        Country = "Uzbekistan", 
+                        Address = "Termez Historical Area" 
+                    },
+                    new Location { 
+                        City = "Kokand", 
+                        State = "10", 
+                        Country = "Uzbekistan", 
+                        Address = "Kokand Center" 
+                    }
+                };
+
+                _context.Locations.AddRange(locations);
+            }
+
             await _context.SaveChangesAsync();
         }
     }
