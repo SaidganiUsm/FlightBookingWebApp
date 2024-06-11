@@ -190,6 +190,19 @@ namespace FlightBookingApp.Infrastructure.Persistence
                 _context.Locations.AddRange(locations);
             }
 
+            if (!_context.FlightStatuses.Any())
+            {
+                var statuses = new List<FlightStatus>
+                {
+                    new FlightStatus { Name = "Scheduled" },
+                    new FlightStatus { Name = "Cancelled" },
+                    new FlightStatus { Name = "InFlight" },
+                    new FlightStatus { Name = "Landed" }
+                };
+
+                _context.FlightStatuses.AddRange(statuses);
+            }
+
             await _context.SaveChangesAsync();
         }
     }
