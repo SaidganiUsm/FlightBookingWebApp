@@ -8,6 +8,8 @@ namespace FlightBookingApp.Application.Common.DTOs
 
         public DateTime EndDateTime { get; set; }
 
+        public FlightStatus FlightStatus { get; set; }
+
         public Location? DepartureLocation { get; set; }
 
         public Location? DestinationLocation { get; set; }
