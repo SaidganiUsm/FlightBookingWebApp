@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FlightBookingApp.Application.Common.Interfaces.Repositories;
-using FlightBookingApp.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +30,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetbyId
                 f => f.Id == request.Id,
                 include: f => f.Include(f => f.Tickets)
                                .Include(f => f.DepartureLocation)
+                               .Include(s => s.FlightStatus)
                                .Include(f => f.DestinationLocation!),
                 cancellationToken: cancellationToken);
 

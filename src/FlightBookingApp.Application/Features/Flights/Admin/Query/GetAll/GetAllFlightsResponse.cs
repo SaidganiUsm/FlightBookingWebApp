@@ -17,5 +17,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetAll
         public int TotalTickets { get; set; }
 
         public int TicketsAvailable { get; set; }
+
+        public FlightSatusDto? FlightStatus { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetAll
             var flights = await _flightRepository.GetListAsync(
                 include: f => f.Include(f => f.Tickets)
                 .Include(f => f.DepartureLocation)
+                .Include(s => s.FlightStatus)
                 .Include(f => f.DestinationLocation!),
                 enableTracking: false,
                 size: request.PageRequest.PageSize,
