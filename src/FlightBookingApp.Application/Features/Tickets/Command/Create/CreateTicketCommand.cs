@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FlightBookingApp.Application.Common.Interfaces.Repositories;
 using FlightBookingApp.Application.Common.Interfaces.Services;
+using FlightBookingApp.Application.Features.Tickets.Command.BaseValidator;
 using FlightBookingApp.Core.Entities;
 using FlightBookingApp.Core.Enums;
 using MediatR;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlightBookingApp.Application.Features.Tickets.Command.Create
 {
-    public class CreateTicketCommand : IRequest<CreateTicketResponse>
+    public class CreateTicketCommand : IRequest<CreateTicketResponse>, ITicketCommandValidator
     {
         public int FlightId { get; set; }
         public string? TicketRank { get; set; }
