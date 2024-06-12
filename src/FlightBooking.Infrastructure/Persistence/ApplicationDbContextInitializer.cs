@@ -192,7 +192,7 @@ namespace FlightBookingApp.Infrastructure.Persistence
 
             if (!_context.FlightStatuses.Any())
             {
-                var statuses = new List<FlightStatus>
+                var flightStatuses = new List<FlightStatus>
                 {
                     new FlightStatus { Name = "Scheduled" },
                     new FlightStatus { Name = "Cancelled" },
@@ -200,7 +200,31 @@ namespace FlightBookingApp.Infrastructure.Persistence
                     new FlightStatus { Name = "Landed" }
                 };
 
-                _context.FlightStatuses.AddRange(statuses);
+                _context.FlightStatuses.AddRange(flightStatuses);
+            }
+
+            if (!_context.FlightStatuses.Any())
+            {
+                var ticketStatuses = new List<TicketStatus>
+                {
+                    new TicketStatus { Name = "Booked" },
+                    new TicketStatus { Name = "Cancelled" },
+                    new TicketStatus { Name = "Used" }
+                };
+
+                _context.TicketStatuses.AddRange(ticketStatuses);
+            }
+
+            if (!_context.FlightStatuses.Any())
+            {
+                var ranks = new List<Rank>
+                {
+                    new Rank { RankName = "Economy" },
+                    new Rank { RankName = "Bsiness" },
+                    new Rank { RankName = "FirstClass" }
+                };
+
+                _context.Ranks.AddRange(ranks);
             }
 
             await _context.SaveChangesAsync();
