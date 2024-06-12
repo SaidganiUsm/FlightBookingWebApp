@@ -5,10 +5,10 @@ using FlightBookingApp.Infrastructure.Persistence;
 
 namespace FlightBookingApp.Infrastructure.Repositories
 {
-    public class FlightRepository 
-        : EfBaseRepository<Flight, ApplicationDbContext>, IFlightRepository
+    public class TicketStatusRepository 
+        : EfBaseRepository<TicketStatus, ApplicationDbContext>, ITicketStatusRepository
     {
-        public FlightRepository(ApplicationDbContext context) : base(context)
+        public TicketStatusRepository(ApplicationDbContext context) : base(context)
         {
         }
     }
