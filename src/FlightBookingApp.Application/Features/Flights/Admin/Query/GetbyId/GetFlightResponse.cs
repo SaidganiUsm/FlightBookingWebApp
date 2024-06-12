@@ -18,6 +18,6 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Query.GetbyId
 
         public int TicketsAvailable { get; set; }
 
-        public FlightSatusDto? FlightStatus { get; set; }
+        public FlightStatusDto? FlightStatus { get; set; }
     }
 }

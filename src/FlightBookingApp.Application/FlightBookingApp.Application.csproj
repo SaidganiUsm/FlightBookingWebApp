@@ -11,9 +11,10 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Features\Flights\User\Command\" />
-    <Folder Include="Features\Flights\User\Profiles\" />
-    <Folder Include="Features\Flights\User\Query\" />
+    <Folder Include="Features\Tickets\Command\Delete\" />
+    <Folder Include="Features\Tickets\Command\Update\" />
+    <Folder Include="Features\Tickets\Query\GetById\" />
+    <Folder Include="Features\Tickets\Query\GetAll\" />
   </ItemGroup>
 	
   <ItemGroup>
