@@ -47,6 +47,8 @@ namespace FlightBookingApp.Infrastructure.Persistence
 
         public virtual DbSet<Location> Locations => Set<Location>();
 
+        public virtual DbSet<FlightStatus> FlightStatuses => Set<FlightStatus>();
+
         protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);

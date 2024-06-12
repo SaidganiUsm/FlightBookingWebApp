@@ -64,7 +64,7 @@ namespace FlightBookingApp.Infrastructure.Persistence
             // Default roles
             var roles = new List<Role>
             {
-                new Role { Name = "Administrator", },
+                new Role { Name = "Admin", },
                 new Role { Name = "User", },
             };
 
@@ -101,7 +101,7 @@ namespace FlightBookingApp.Infrastructure.Persistence
                     switch (user.UserName)
                     {
                         case "admin@localhost.com":
-                            var adminRole = roles.Find(r => r.Name == "Administrator");
+                            var adminRole = roles.Find(r => r.Name == "Admin");
                             if (adminRole != null)
                             {
                                 await _userManager.AddToRolesAsync(
@@ -122,6 +122,85 @@ namespace FlightBookingApp.Infrastructure.Persistence
                             break;
                     }
                 }
+            }
+
+            if (!_context.Locations.Any())
+            {
+                var locations = new List<Location>
+                {
+                    new Location { 
+                        City = "Tashkent", 
+                        State = "1", 
+                        Country = "Uzbekistan", 
+                        Address = "Central Tashkent" 
+                    },
+                    new Location { 
+                        City = "Samarkand", 
+                        State = "2", 
+                        Country = "Uzbekistan", 
+                        Address = "Historical Samarkand" 
+                    },
+                    new Location { 
+                        City = "Bukhara", 
+                        State = "3", 
+                        Country = "Uzbekistan", 
+                        Address = "Old Bukhara" 
+                    },
+                    new Location { 
+                        City = "Khiva", 
+                        State = "4", Country = "Uzbekistan", Address = "Ancient Khiva" },
+                    new Location { 
+                        City = "Andijan", 
+                        State = "5", 
+                        Country = "Uzbekistan", 
+                        Address = "Andijan City Center" 
+                    },
+                    new Location { 
+                        City = "Namangan", 
+                        State = "6", 
+                        Country = "Uzbekistan", 
+                        Address = "Namangan Downtown" 
+                    },
+                    new Location { 
+                        City = "Fergana", 
+                        State = "7", 
+                        Country = "Uzbekistan", 
+                        Address = "Fergana Valley" 
+                    },
+                    new Location { 
+                        City = "Nukus", 
+                        State = "8", 
+                        Country = "Uzbekistan", 
+                        Address = "Nukus City" 
+                    },
+                    new Location { 
+                        City = "Termez", 
+                        State = "9", 
+                        Country = "Uzbekistan", 
+                        Address = "Termez Historical Area" 
+                    },
+                    new Location { 
+                        City = "Kokand", 
+                        State = "10", 
+                        Country = "Uzbekistan", 
+                        Address = "Kokand Center" 
+                    }
+                };
+
+                _context.Locations.AddRange(locations);
+            }
+
+            if (!_context.FlightStatuses.Any())
+            {
+                var statuses = new List<FlightStatus>
+                {
+                    new FlightStatus { Name = "Scheduled" },
+                    new FlightStatus { Name = "Cancelled" },
+                    new FlightStatus { Name = "InFlight" },
+                    new FlightStatus { Name = "Landed" }
+                };
+
+                _context.FlightStatuses.AddRange(statuses);
             }
 
             await _context.SaveChangesAsync();
