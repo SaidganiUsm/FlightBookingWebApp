@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Update
 {
-    public class UpdateCommandValidator : AbstractValidator<UpdateFlightCommand>
+    public class UpdateFlightValidator : AbstractValidator<UpdateFlightCommand>
     {
-        public UpdateCommandValidator()
+        public UpdateFlightValidator()
         {
-            Include(new BaseLotCommandsValidator());
+            Include(new BaseFlightCommandsValidator());
         }
     }
 }

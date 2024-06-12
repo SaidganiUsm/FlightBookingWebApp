@@ -2,10 +2,10 @@
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.BaseValidator
 {
-    public class BaseLotCommandsValidator : AbstractValidator<IFlightCommandsValidator>
+    public class BaseFlightCommandsValidator : AbstractValidator<IFlightCommandsValidator>
     {
         private readonly int flightStartAndEndTimeDifferencesInMinutes = 30;
-        public BaseLotCommandsValidator()
+        public BaseFlightCommandsValidator()
         {
             RuleFor(l => l.DepartureLocationId)
                 .NotEqual(l => l.DestinationLocationId)

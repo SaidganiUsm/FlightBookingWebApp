@@ -3,12 +3,12 @@ using FluentValidation;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
 {
-    public class CreateCommandValidator : AbstractValidator<CreateFlightCommand>
+    public class CreateFlightValidator : AbstractValidator<CreateFlightCommand>
     {
         private readonly int DaysBeforeCreation = 1;
-        public CreateCommandValidator() 
+        public CreateFlightValidator() 
         {
-            Include(new BaseLotCommandsValidator());
+            Include(new BaseFlightCommandsValidator());
 
             RuleFor(command => command.StartDateTime)
                .Must(BeBeforeOneDays)
