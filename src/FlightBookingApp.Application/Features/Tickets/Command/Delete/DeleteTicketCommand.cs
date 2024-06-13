@@ -1,9 +1,6 @@
 ﻿using FlightBookingApp.Application.Common.Interfaces.Repositories;
-using FlightBookingApp.Application.Common.Interfaces.Services;
-using FlightBookingApp.Core.Entities;
 using FlightBookingApp.Core.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 {
@@ -17,20 +14,17 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 	{
 		private readonly ITicketRepository _ticketRepository;
 		private readonly ITicketStatusRepository _ticketStatusRepository;
-		private readonly ICurrentUserService _currentUserService;
-		private readonly UserManager<User> _userManager;
+		private readonly IFlightRepository _flightRepository;
 
         public DeleteTicketCommandHandler(
 			ITicketRepository ticketRepository,
 			ITicketStatusRepository ticketStatusRepository,
-			ICurrentUserService currentUserService,
-			UserManager<User> userManager
+			IFlightRepository flightRepository
 		)
         {
             _ticketRepository = ticketRepository;
 			_ticketStatusRepository = ticketStatusRepository;
-			_currentUserService = currentUserService;
-			_userManager = userManager;
+			_flightRepository = flightRepository;
         }
 
         public async Task<DeleteTicketResponse> Handle(DeleteTicketCommand request, CancellationToken cancellationToken)
@@ -46,6 +40,15 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 			);
 
 			ticket!.TicketStatus = status;
+
+			var flight = await _flightRepository.GetAsync(
+				x => x.Id == ticket.FlightId,
+				cancellationToken: cancellationToken
+			);
+
+			flight!.TicketsAvailable += 1;
+
+			await _flightRepository.UpdateAsync(flight);
 
 			return new DeleteTicketResponse { Id = request.Id };
 		}
