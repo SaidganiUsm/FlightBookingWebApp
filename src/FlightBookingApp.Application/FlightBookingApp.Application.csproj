@@ -11,8 +11,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Features\Tickets\Command\Delete\" />
-    <Folder Include="Features\Tickets\Query\GetById\" />
     <Folder Include="Features\Tickets\Query\GetAll\" />
   </ItemGroup>
 	
