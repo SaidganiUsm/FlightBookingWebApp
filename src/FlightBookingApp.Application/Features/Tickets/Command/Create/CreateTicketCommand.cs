@@ -81,6 +81,10 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
             
             await _ticketRepository.AddAsync(ticket);
 
+            flight!.TicketsAvailable -= 1;
+
+            await _flightRepository.UpdateAsync(flight);
+
             return new CreateTicketResponse { Id = ticket.Id };
         }
     }
