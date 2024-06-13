@@ -14,6 +14,7 @@ namespace FlightBookingApp.Application.Common.Profiles
             CreateMap<Location, LocationDto>();
             CreateMap<Rank, RankDto>();
             CreateMap<FlightStatus, FlightStatusDto>();
+            CreateMap<TicketStatus, TicketStatusDto>();
         }
     }
 }

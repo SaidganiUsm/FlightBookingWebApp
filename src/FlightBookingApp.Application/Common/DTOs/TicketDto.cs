@@ -12,6 +12,6 @@ namespace FlightBookingApp.Application.Common.DTOs
 
         public RankDto? Rank { get; set; }
 
-        public TicketStatus? TicketStatus { get; set; }
+        public TicketStatusDto? TicketStatus { get; set; }
     }
 }
