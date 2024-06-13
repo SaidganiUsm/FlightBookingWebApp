@@ -4,7 +4,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 {
     public class UpdateTicketCommand : IRequest<UpdateTicketResponse>
     {
-        public int FlightId { get; set; }
+        public int Id { get; set; }
         public string? TicketRank { get; set; }
         public double? Price { get; set; }
     }
