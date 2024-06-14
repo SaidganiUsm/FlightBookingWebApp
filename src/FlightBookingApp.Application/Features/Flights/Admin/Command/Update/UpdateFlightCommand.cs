@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FlightBookingApp.Application.Common.Interfaces.Repositories;
 using FlightBookingApp.Application.Features.Flights.Admin.Command.BaseValidator;
-using FlightBookingApp.Core.Entities;
 using MediatR;
 
 namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Update
@@ -13,8 +12,11 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Update
         public DateTime EndDateTime { get; set; }
         public int DepartureLocationId { get; set; }
         public int DestinationLocationId { get; set; }
-        public int TotalTickets { get; set; }
-    }
+        public int FirstClassTicketsAmout { get; set; }
+        public int BusinessTicketsAmout { get; set; }
+        public int EconomyTicketsAmout { get; set; }
+        public int StandartPriceForFlight { get; set; }
+}
 
     public class UpdateFlightCommandHandler : IRequestHandler<UpdateFlightCommand, UpdateFlightResponse>
     {
@@ -38,6 +40,10 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Update
 
             if (flight == null)
                 return null!;
+
+            flight.FirstClassTicketsAmount += request.FirstClassTicketsAmout;
+            flight.BusinessTicketsAmount += request.BusinessTicketsAmout;
+            flight.EconomyTicketsAmount += request.EconomyTicketsAmout;
 
             _mapper.Map(request, flight);
 

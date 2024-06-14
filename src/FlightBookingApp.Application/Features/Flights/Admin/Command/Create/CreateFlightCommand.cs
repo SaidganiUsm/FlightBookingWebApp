@@ -13,7 +13,10 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
         public DateTime EndDateTime { get; set; }
         public int DepartureLocationId { get; set; }
         public int DestinationLocationId { get; set; }
-        public int TotalTickets { get; set; }
+        public int FirstClassTicketsAmout { get; set; }
+        public int BusinessTicketsAmout { get; set; }
+        public int EconomyTicketsAmout { get; set; }
+        public int StandartPriceForFlight { get; set; }
     }
 
     public class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand, CreateFlightResponse>
@@ -21,19 +24,16 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
         private readonly IFlightRepository _flightRepository;
         private readonly ILocationRepository _locationRepository;
         private readonly IFlightStatusRepository _flightStatusRepository;
-        private readonly IMapper _mapper;
 
         public CreateFlightCommandHandler(
             IFlightRepository flightRepository, 
             ILocationRepository locationRepository,
-            IFlightStatusRepository flightStatusRepository,
-            IMapper mapper
+            IFlightStatusRepository flightStatusRepository
         )
         {
             _flightRepository = flightRepository;
             _locationRepository = locationRepository;
             _flightStatusRepository = flightStatusRepository;
-            _mapper = mapper;
         }
 
         public async Task<CreateFlightResponse> Handle(
@@ -56,6 +56,9 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
                 cancellationToken: cancellationToken
             );
 
+            var amount = request.FirstClassTicketsAmout + request.BusinessTicketsAmout +
+                request.EconomyTicketsAmout;
+
             var newFlight = new Flight
             {
                 StartDateTime = request.StartDateTime,
@@ -63,8 +66,11 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Create
                 DepartureLocation = departure,
                 DestinationLocation = destination,
                 FlightStatus = status,
-                TotalTickets = request.TotalTickets,
-                TicketsAvailable = request.TotalTickets
+                TotalTickets = amount,
+                TicketsAvailable = amount,
+                FirstClassTicketsAmount = request.FirstClassTicketsAmout,
+                BusinessTicketsAmount = request.BusinessTicketsAmout,
+                EconomyTicketsAmount = request.EconomyTicketsAmout
             };
 
             var result = await _flightRepository.AddAsync(newFlight);
