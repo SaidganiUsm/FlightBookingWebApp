@@ -1,6 +1,7 @@
 ﻿using FlightBookingApp.Application.Common.Interfaces.Repositories;
 using FlightBookingApp.Core.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 {
@@ -31,6 +32,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 		{
 			var ticket = await _ticketRepository.GetAsync(
 				t => t.Id == request.Id,
+				include: x => x.Include(x => x.Rank!),
 				cancellationToken: cancellationToken
 			);
 
@@ -46,7 +48,20 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 				cancellationToken: cancellationToken
 			);
 
-			flight!.TicketsAvailable += 1;
+            switch (ticket.Rank!.RankName)
+            {
+                case "FirstClass":
+                    flight!.FirstClassTicketsAmount += 1;
+                    break;
+                case "Business":
+                    flight!.BusinessTicketsAmount += 1;
+                    break;
+                case "Economy":
+                    flight!.EconomyTicketsAmount += 1;
+                    break;
+            }
+
+            flight!.TicketsAvailable += 1;
 
 			await _flightRepository.UpdateAsync(flight);
 
