@@ -19,5 +19,11 @@ namespace FlightBookingApp.Application.Features.Flights.User.Query
         public int TicketsAvailable { get; set; }
 
         public FlightStatusDto? FlightStatus { get; set; }
+
+        public int FirstClassTicketsAmount { get; set; }
+
+        public int BusinessTicketsAmount { get; set; }
+
+        public int EconomyTicketsAmount { get; set; }
     }
 }
