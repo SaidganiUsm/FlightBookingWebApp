@@ -4,6 +4,8 @@ namespace FlightBookingApp.Application.Features.Tickets.Query.GetAll
 {
     public class GetAllTicketsResponse
     {
+        public int Id { get; set; }
+
         public double? Price { get; set; }
 
         public FlightDto? Flight { get; set; }

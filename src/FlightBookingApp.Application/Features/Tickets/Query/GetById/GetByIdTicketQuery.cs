@@ -45,11 +45,11 @@ namespace FlightBookingApp.Application.Features.Tickets.Query.GetById
             );
 
             var departure = await _locationRepository.GetAsync(
-                    x => x.Id == ticket.Flight!.DepartureLocationId,
+                    x => x.Id == ticket!.Flight!.DepartureLocationId,
                     cancellationToken: cancellationToken
                 );
 
-            ticket.Flight!.DepartureLocation = departure;
+            ticket!.Flight!.DepartureLocation = departure;
 
             var destination = await _locationRepository.GetAsync(
                 x => x.Id == ticket.Flight.DestinationLocationId,
