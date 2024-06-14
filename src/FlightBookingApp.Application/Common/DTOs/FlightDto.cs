@@ -17,5 +17,13 @@ namespace FlightBookingApp.Application.Common.DTOs
         public int TotalTickets { get; set; }
 
         public int TicketsAvailable { get; set; }
+
+        public int FirstClassTicketsAmount { get; set; }
+
+        public int BusinessTicketsAmount { get; set; }
+
+        public int EconomyTicketsAmount { get; set; }
+
+        public int StandartPriceForFlight { get; set; }
     }
 }
