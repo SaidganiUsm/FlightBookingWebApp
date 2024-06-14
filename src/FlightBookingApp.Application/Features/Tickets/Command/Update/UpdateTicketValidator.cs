@@ -13,17 +13,20 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 		private readonly ITicketRepository _ticketRepository;
 		private readonly ITicketStatusRepository _ticketStatusRepository;
 		private readonly ICurrentUserService _currentUserService;
+		private readonly IRankRepository _rankRepository;
 		private readonly UserManager<User> _userManager;
 		public UpdateTicketValidator(
 			ITicketRepository ticketRepository,
 			ICurrentUserService currentUserService,
 			ITicketStatusRepository ticketStatusRepository,
+			IRankRepository rankRepository,
 			UserManager<User> userManager
 		)
 		{
 			_ticketRepository = ticketRepository;
 			_currentUserService = currentUserService;
 			_ticketStatusRepository = ticketStatusRepository;
+			_rankRepository = rankRepository;
 			_userManager = userManager;
 
 			RuleFor(x => x.Id)
@@ -40,7 +43,21 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 				)
 				.WithMessage("Ticket with this Id does not exist");
 
-			RuleFor(x => x.Id)
+            RuleFor(x => x.TicketRank)
+                .MustAsync(
+                    async (ticketRank, cancellationToken) =>
+                    {
+                        var rank = await _rankRepository.GetAsync(
+                            predicate: x => x.RankName == ticketRank,
+                            cancellationToken: cancellationToken
+                        );
+
+                        return rank != null;
+                    }
+                )
+                .WithMessage("Rank with this name does not exist");
+
+            RuleFor(x => x.Id)
 				.MustAsync(
 					async (id, cancellationToken) =>
 					{
@@ -65,6 +82,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 					{
 						var ticket = await _ticketRepository.GetAsync(
 							predicate: x => x.Id == id,
+							include: x => x.Include(x => x.TicketStatus!),
 							cancellationToken: cancellationToken
 						);
 
@@ -73,7 +91,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 							cancellationToken: cancellationToken
 						);
 
-						return ticket!.TicketStatus == status;
+						return ticket!.TicketStatus != status;
 					}
 				)
 				.WithMessage("You cannot update cancelled ticket information!");
@@ -84,7 +102,8 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 					{
 						var ticket = await _ticketRepository.GetAsync(
 							predicate: x => x.Id == id,
-							cancellationToken: cancellationToken
+                            include: x => x.Include(x => x.TicketStatus!),
+                            cancellationToken: cancellationToken
 						);
 
 						var status = await _ticketStatusRepository.GetAsync(
@@ -92,7 +111,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 							cancellationToken: cancellationToken
 						);
 
-						return ticket!.TicketStatus == status;
+						return ticket!.TicketStatus != status;
 					}
 				)
 				.WithMessage("You cannot update used ticket information!");

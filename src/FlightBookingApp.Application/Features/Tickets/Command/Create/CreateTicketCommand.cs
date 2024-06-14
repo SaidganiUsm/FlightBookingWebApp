@@ -2,6 +2,7 @@
 using FlightBookingApp.Application.Common.Interfaces.Services;
 using FlightBookingApp.Core.Entities;
 using FlightBookingApp.Core.Enums;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,6 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
     {
         public int FlightId { get; set; }
         public string? TicketRank { get; set; }
-        public double? Price { get; set; }
     }
 
     public class CreateTicketCommandHandler 
@@ -70,15 +70,36 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
                 cancellationToken: cancellationToken
             );
 
+            var price = ticketRank!.RankPriceRatio * flight!.StandartPriceForFlight;
+
             var ticket = new Ticket
             {
                 Flight = flight,
-                User = user,
-                Price = request.Price,
+                UserId = user.Id,
+                Price = price,
                 Rank = ticketRank,
                 TicketStatus = defaultStatus,
             };
-            
+
+            switch (request.TicketRank)
+            {
+                case "FirstClass":
+                    if (flight.FirstClassTicketsAmount <= 0)
+                        throw new ValidationException("No any first class tickets left");
+                    flight.FirstClassTicketsAmount -= 1;
+                    break;
+                case "Business":
+                    if (flight.BusinessTicketsAmount <= 0)
+                        throw new ValidationException("No any business class tickets left");
+                    flight.BusinessTicketsAmount -= 1;
+                    break;
+                case "Economy":
+                    if (flight.EconomyTicketsAmount <= 0)
+                        throw new ValidationException("No any econom class tickets left");
+                    flight.EconomyTicketsAmount -= 1;
+                    break;
+            }
+
             await _ticketRepository.AddAsync(ticket);
 
             flight!.TicketsAvailable -= 1;
