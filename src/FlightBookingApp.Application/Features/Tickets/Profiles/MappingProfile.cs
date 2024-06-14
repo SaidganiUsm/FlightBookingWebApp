@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FlightBookingApp.Application.Common.DTOs;
+using FlightBookingApp.Application.Features.Tickets.ConfiguredResponseModel;
 using FlightBookingApp.Application.Features.Tickets.Query.GetAll;
 using FlightBookingApp.Application.Features.Tickets.Query.GetById;
 using FlightBookingApp.Core.Entities;
@@ -14,6 +15,8 @@ namespace FlightBookingApp.Application.Features.Tickets.Profiles
             CreateMap<Ticket, GetAllTicketsResponse>().ReverseMap();
             CreateMap<IPaginate<Ticket>, GetListResponseDto<GetAllTicketsResponse>>().ReverseMap();
             CreateMap<Ticket, GetByIdTicketResponse>().ReverseMap();
+
+            CreateMap<Flight, FlightResponseModelForTicket>().ReverseMap();
         }
     }
 }

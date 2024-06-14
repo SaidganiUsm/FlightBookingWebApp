@@ -1,4 +1,5 @@
 ﻿using FlightBookingApp.Application.Common.DTOs;
+using FlightBookingApp.Application.Features.Tickets.ConfiguredResponseModel;
 
 namespace FlightBookingApp.Application.Features.Tickets.Query.GetAll
 {
@@ -8,7 +9,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Query.GetAll
 
         public double? Price { get; set; }
 
-        public FlightDto? Flight { get; set; }
+        public FlightResponseModelForTicket? Flight { get; set; }
 
         public RankDto? Rank { get; set; }
 

@@ -47,7 +47,7 @@ namespace FlightBookingApp.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Update([FromBody] UpdateTicketCommand command)
         {
