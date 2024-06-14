@@ -225,9 +225,21 @@ namespace FlightBookingApp.Infrastructure.Persistence
             {
                 var ranks = new List<Rank>
                 {
-                    new Rank { RankName = "Economy" },
-                    new Rank { RankName = "Bsiness" },
-                    new Rank { RankName = "FirstClass" }
+                    new Rank 
+                    { 
+                        RankName = "Economy", 
+                        RankPriceRatio = 1 
+                    },
+                    new Rank 
+                    { 
+                        RankName = "Business", 
+                        RankPriceRatio = 2 
+                    },
+                    new Rank 
+                    { 
+                        RankName = "FirstClass", 
+                        RankPriceRatio = 3 
+                    }
                 };
 
                 _context.Ranks.AddRange(ranks);
@@ -248,8 +260,11 @@ namespace FlightBookingApp.Infrastructure.Persistence
                         DepartureLocationId = locations[0].Id, 
                         DestinationLocationId = locations[2].Id, 
                         FlightStatusId = flightStatus[0].Id,
-                        TotalTickets = 40,
-                        TicketsAvailable = 40,
+                        FirstClassTicketsAmount = 10,
+                        BusinessTicketsAmount = 20,
+                        EconomyTicketsAmount= 50,
+                        TotalTickets = 80,
+                        TicketsAvailable = 80,
                     },
                     new Flight 
                     { 
@@ -258,8 +273,11 @@ namespace FlightBookingApp.Infrastructure.Persistence
                         DepartureLocationId = locations[1].Id, 
                         DestinationLocationId = locations[0].Id, 
                         FlightStatusId = flightStatus[1].Id,
-                        TotalTickets = 40,
-                        TicketsAvailable = 40,
+                        FirstClassTicketsAmount = 10,
+                        BusinessTicketsAmount = 20,
+                        EconomyTicketsAmount= 50,
+                        TotalTickets = 80,
+                        TicketsAvailable = 80,
                     }
                 };
 
