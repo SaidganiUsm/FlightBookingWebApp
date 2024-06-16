@@ -12,7 +12,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
     public class CreateTicketCommand : IRequest<CreateTicketResponse>
     {
         public int FlightId { get; set; }
-        public string? TicketRank { get; set; }
+        public TicketRanks TicketRank { get; set; }
     }
 
     public class CreateTicketCommandHandler 
@@ -66,7 +66,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
             );
 
             var ticketRank = await _rankRepository.GetAsync(
-                s => s.RankName == request.TicketRank,
+                s => s.RankName == request.TicketRank.ToString(),
                 cancellationToken: cancellationToken
             );
 
@@ -81,24 +81,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
                 TicketStatus = defaultStatus,
             };
 
-            switch (request.TicketRank)
-            {
-                case "FirstClass":
-                    if (flight.FirstClassTicketsAmount <= 0)
-                        throw new ValidationException("No any first class tickets left");
-                    flight.FirstClassTicketsAmount -= 1;
-                    break;
-                case "Business":
-                    if (flight.BusinessTicketsAmount <= 0)
-                        throw new ValidationException("No any business class tickets left");
-                    flight.BusinessTicketsAmount -= 1;
-                    break;
-                case "Economy":
-                    if (flight.EconomyTicketsAmount <= 0)
-                        throw new ValidationException("No any econom class tickets left");
-                    flight.EconomyTicketsAmount -= 1;
-                    break;
-            }
+            AdjustTicketAvailability(flight, request.TicketRank, -1);
 
             await _ticketRepository.AddAsync(ticket);
 
@@ -107,6 +90,28 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
             await _flightRepository.UpdateAsync(flight);
 
             return new CreateTicketResponse { Id = ticket.Id };
+        }
+
+        private void AdjustTicketAvailability(Flight flight, TicketRanks rank, int adjustment)
+        {
+            switch (rank)
+            {
+                case TicketRanks.FirstClass:
+                    if (flight.FirstClassTicketsAmount + adjustment < 0)
+                        throw new ValidationException("No first class tickets left");
+                    flight.FirstClassTicketsAmount += adjustment;
+                    break;
+                case TicketRanks.Business:
+                    if (flight.BusinessTicketsAmount + adjustment < 0)
+                        throw new ValidationException("No business class tickets left");
+                    flight.BusinessTicketsAmount += adjustment;
+                    break;
+                case TicketRanks.Economy:
+                    if (flight.EconomyTicketsAmount + adjustment < 0)
+                        throw new ValidationException("No economy class tickets left");
+                    flight.EconomyTicketsAmount += adjustment;
+                    break;
+            }
         }
     }
 }

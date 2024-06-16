@@ -48,7 +48,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
                     async (ticketRank, cancellationToken) =>
                     {
                         var rank = await _rankRepository.GetAsync(
-                            predicate: x => x.RankName == ticketRank,
+                            predicate: x => x.RankName == ticketRank.ToString(),
                             cancellationToken: cancellationToken
                         );
 

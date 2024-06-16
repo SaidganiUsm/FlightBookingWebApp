@@ -1,4 +1,5 @@
 ﻿using FlightBookingApp.Application.Common.Interfaces.Repositories;
+using FlightBookingApp.Core.Entities;
 using FlightBookingApp.Core.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -48,18 +49,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 				cancellationToken: cancellationToken
 			);
 
-            switch (ticket.Rank!.RankName)
-            {
-                case "FirstClass":
-                    flight!.FirstClassTicketsAmount += 1;
-                    break;
-                case "Business":
-                    flight!.BusinessTicketsAmount += 1;
-                    break;
-                case "Economy":
-                    flight!.EconomyTicketsAmount += 1;
-                    break;
-            }
+            AdjustTicketAvailability(flight!, ticket.Rank!, 1);
 
             flight!.TicketsAvailable += 1;
 
@@ -67,5 +57,24 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Delete
 
 			return new DeleteTicketResponse { Id = request.Id };
 		}
-	}
+
+        private void AdjustTicketAvailability(Flight flight, Rank rank, int adjustment)
+        {
+            if (Enum.TryParse(rank.RankName, out TicketRanks ticketRank))
+            {
+                switch (ticketRank)
+                {
+                    case TicketRanks.FirstClass:
+                        flight.FirstClassTicketsAmount += adjustment;
+                        break;
+                    case TicketRanks.Business:
+                        flight.BusinessTicketsAmount += adjustment;
+                        break;
+                    case TicketRanks.Economy:
+                        flight.EconomyTicketsAmount += adjustment;
+                        break;
+                }
+            }
+        }
+    }
 }

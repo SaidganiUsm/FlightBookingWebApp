@@ -1,14 +1,14 @@
 ﻿using FlightBookingApp.Application.Common.Interfaces.Repositories;
 using FlightBookingApp.Core.Entities;
+using FlightBookingApp.Core.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace FlightBookingApp.Application.Features.Tickets.Command.Update
 {
     public class UpdateTicketCommand : IRequest<UpdateTicketResponse>
     {
         public int Id { get; set; }
-        public string? TicketRank { get; set; }
+        public TicketRanks TicketRank { get; set; }
     }
 
     public class UpdateTicketCommandHandler
@@ -44,43 +44,17 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
                 cancellationToken: cancellationToken
             );
 
-            if (flight == null)
-                return null;
-
             var newRank = await _rankRepository.GetAsync(
-                x => x.RankName == request.TicketRank,
+                x => x.RankName == request.TicketRank.ToString(),
             cancellationToken: cancellationToken
             );
 
-            Rank? oldRank = ticket!.Rank;
+            var oldRank = ticket!.Rank;
 
-            if (oldRank != null && newRank != null && oldRank.Id != newRank.Id)
+            if (oldRank != null && oldRank.Id != newRank!.Id)
             {
-                switch (oldRank.RankName)
-                {
-                    case "FirstClass":
-                        flight.FirstClassTicketsAmount += 1;
-                        break;
-                    case "Business":
-                        flight.BusinessTicketsAmount += 1;
-                        break;
-                    case "Economy":
-                        flight.EconomyTicketsAmount += 1;
-                        break;
-                }
-
-                switch (newRank.RankName)
-                {
-                    case "FirstClass":
-                        flight.FirstClassTicketsAmount -= 1;
-                        break;
-                    case "Business":
-                        flight.BusinessTicketsAmount -= 1;
-                        break;
-                    case "Economy":
-                        flight.EconomyTicketsAmount -= 1;
-                        break;
-                }
+                AdjustTicketAvailability(flight, oldRank, 1);
+                AdjustTicketAvailability(flight, newRank, -1);
             }
 
             var price = newRank!.RankPriceRatio * flight!.StandartPriceForFlight;
@@ -88,6 +62,25 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Update
             ticket!.Rank = newRank;
 
             return new UpdateTicketResponse { Id = request.Id };
+        }
+
+        private void AdjustTicketAvailability(Flight flight, Rank rank, int adjustment)
+        {
+            if (Enum.TryParse(rank.RankName, out TicketRanks ticketRank))
+            {
+                switch (ticketRank)
+                {
+                    case TicketRanks.FirstClass:
+                        flight.FirstClassTicketsAmount += adjustment;
+                        break;
+                    case TicketRanks.Business:
+                        flight.BusinessTicketsAmount += adjustment;
+                        break;
+                    case TicketRanks.Economy:
+                        flight.EconomyTicketsAmount += adjustment;
+                        break;
+                }
+            }
         }
     }
 }
