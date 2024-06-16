@@ -18,5 +18,9 @@ namespace FlightBookingApp.Core.Entities
         public int RankId { get; set; }
 
         public Rank? Rank { get; set; }
+
+        public int TicketStatusId { get; set; }
+
+        public TicketStatus? TicketStatus { get; set; }
     }
 }

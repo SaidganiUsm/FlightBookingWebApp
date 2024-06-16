@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FlightBookingApp.Application.Common.Interfaces.Repositories;
-using FlightBookingApp.Core.Entities;
+﻿using FlightBookingApp.Application.Common.Interfaces.Repositories;
 using FlightBookingApp.Core.Enums;
 using MediatR;
 
@@ -15,17 +13,20 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Delete
     {
         private readonly IFlightRepository _flightRepository;
         private readonly IFlightStatusRepository _flightStatusRepository;
-        private readonly IMapper _mapper;
+        private readonly ITicketRepository _ticketRepository;
+        private readonly ITicketStatusRepository _ticketStatusRepository;
 
         public DeleteFlightCommandHandler(
             IFlightRepository flightRepository, 
             IFlightStatusRepository flightStatusRepository,
-            IMapper mapper
+            ITicketRepository ticketRepository,
+            ITicketStatusRepository ticketStatusRepository
         )
         {
             _flightRepository = flightRepository;
             _flightStatusRepository = flightStatusRepository;
-            _mapper = mapper;
+            _ticketRepository = ticketRepository;
+            _ticketStatusRepository = ticketStatusRepository;
         }
 
         public async Task<DeleteFlightResponse> Handle(DeleteFlightCommand request, CancellationToken cancellationToken)
@@ -42,6 +43,23 @@ namespace FlightBookingApp.Application.Features.Flights.Admin.Command.Delete
 
             if (flight == null)
                 return null!;
+
+            var tickets = await _ticketRepository.GetUnpaginatedListAsync(
+                x => x.FlightId == flight.Id && 
+                x.TicketStatus!.Name == TicketStatuses.Booked.ToString(),
+                cancellationToken: cancellationToken 
+            );
+
+            var ticketStatus = await _ticketStatusRepository.GetAsync(
+                x => x.Name == FlightStatuses.Cancelled.ToString(),
+                cancellationToken: cancellationToken
+            );
+
+            foreach ( var ticket in tickets)
+            {
+                ticket.TicketStatus = ticketStatus;
+                await _ticketRepository.UpdateAsync( ticket );
+            }
 
             flight.FlightStatus = status;
 

@@ -5,7 +5,8 @@ using FlightBookingApp.Infrastructure.Persistence;
 
 namespace FlightBookingApp.Infrastructure.Repositories
 {
-    public class LocationRepository : EfBaseRepository<Location, ApplicationDbContext>, ILocationRepository
+    public class LocationRepository 
+        : EfBaseRepository<Location, ApplicationDbContext>, ILocationRepository
     {
         public LocationRepository(ApplicationDbContext context) : base(context)
         {

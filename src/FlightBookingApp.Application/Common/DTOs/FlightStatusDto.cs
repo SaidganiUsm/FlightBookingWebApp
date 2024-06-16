@@ -1,6 +1,6 @@
 ﻿namespace FlightBookingApp.Application.Common.DTOs
 {
-    public class FlightSatusDto
+    public class FlightStatusDto
     {
         public string? Name { get; set; }
     }

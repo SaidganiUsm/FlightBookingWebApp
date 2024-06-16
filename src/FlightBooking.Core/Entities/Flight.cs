@@ -24,6 +24,14 @@ namespace FlightBookingApp.Core.Entities
 
         public int TicketsAvailable { get; set; }
 
+        public int FirstClassTicketsAmount { get; set; }
+
+        public int BusinessTicketsAmount { get; set; }
+
+        public int EconomyTicketsAmount { get; set; }
+
+        public int StandartPriceForFlight { get; set; }
+
         public ICollection<Ticket>? Tickets { get; set; }
     }
 }

@@ -3,5 +3,7 @@
     public class RankDto
     {
         public string? RankName { get; set; }
+
+        public int RankPriceRatio { get; set; }
     }
 }

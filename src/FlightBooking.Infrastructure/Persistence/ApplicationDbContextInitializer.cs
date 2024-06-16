@@ -148,7 +148,10 @@ namespace FlightBookingApp.Infrastructure.Persistence
                     },
                     new Location { 
                         City = "Khiva", 
-                        State = "4", Country = "Uzbekistan", Address = "Ancient Khiva" },
+                        State = "4",
+                        Country = "Uzbekistan", 
+                        Address = "Ancient Khiva" 
+                    },
                     new Location { 
                         City = "Andijan", 
                         State = "5", 
@@ -188,11 +191,12 @@ namespace FlightBookingApp.Infrastructure.Persistence
                 };
 
                 _context.Locations.AddRange(locations);
+                await _context.SaveChangesAsync();
             }
 
             if (!_context.FlightStatuses.Any())
             {
-                var statuses = new List<FlightStatus>
+                var flightStatuses = new List<FlightStatus>
                 {
                     new FlightStatus { Name = "Scheduled" },
                     new FlightStatus { Name = "Cancelled" },
@@ -200,7 +204,122 @@ namespace FlightBookingApp.Infrastructure.Persistence
                     new FlightStatus { Name = "Landed" }
                 };
 
-                _context.FlightStatuses.AddRange(statuses);
+                _context.FlightStatuses.AddRange(flightStatuses);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.TicketStatuses.Any())
+            {
+                var ticketStatuses = new List<TicketStatus>
+                {
+                    new TicketStatus { Name = "Booked" },
+                    new TicketStatus { Name = "Cancelled" },
+                    new TicketStatus { Name = "Used" }
+                };
+
+                _context.TicketStatuses.AddRange(ticketStatuses);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.Ranks.Any())
+            {
+                var ranks = new List<Rank>
+                {
+                    new Rank 
+                    { 
+                        RankName = "Economy", 
+                        RankPriceRatio = 1 
+                    },
+                    new Rank 
+                    { 
+                        RankName = "Business", 
+                        RankPriceRatio = 2 
+                    },
+                    new Rank 
+                    { 
+                        RankName = "FirstClass", 
+                        RankPriceRatio = 3 
+                    }
+                };
+
+                _context.Ranks.AddRange(ranks);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.Flights.Any())
+            {
+                var locations = _context.Locations.Take(3).ToList();
+                var flightStatus = _context.FlightStatuses.Take(2).ToList();
+
+                var flights = new List<Flight>
+                {
+                    new Flight 
+                    { 
+                        StartDateTime = DateTime.Now.AddHours(2), 
+                        EndDateTime = DateTime.Now.AddHours(5), 
+                        DepartureLocationId = locations[0].Id, 
+                        DestinationLocationId = locations[2].Id, 
+                        FlightStatusId = flightStatus[0].Id,
+                        FirstClassTicketsAmount = 10,
+                        BusinessTicketsAmount = 20,
+                        EconomyTicketsAmount= 50,
+                        TotalTickets = 80,
+                        TicketsAvailable = 80,
+                    },
+                    new Flight 
+                    { 
+                        StartDateTime = DateTime.Now.AddDays(1), 
+                        EndDateTime = DateTime.Now.AddDays(1).AddHours(3), 
+                        DepartureLocationId = locations[1].Id, 
+                        DestinationLocationId = locations[0].Id, 
+                        FlightStatusId = flightStatus[1].Id,
+                        FirstClassTicketsAmount = 10,
+                        BusinessTicketsAmount = 20,
+                        EconomyTicketsAmount= 50,
+                        TotalTickets = 80,
+                        TicketsAvailable = 80,
+                    }
+                };
+
+                _context.Flights.AddRange(flights);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.Tickets.Any())
+            {
+                var ticketStatuses = _context.TicketStatuses.Take(3).ToList();
+                var flights = _context.Flights.Take(2).ToList();
+                var ranks = _context.Ranks.Take(3).ToList();
+
+                var tickets = new List<Ticket>
+                {
+                    new Ticket
+                    {
+                        Price = 100,
+                        FlightId = flights[0].Id,
+                        UserId = 2,
+                        RankId = ranks[0].Id,
+                        TicketStatusId = ticketStatuses[0].Id
+                    },
+                    new Ticket
+                    {
+                        Price = 200,
+                        FlightId = flights[1].Id,
+                        UserId = 2,
+                        RankId = ranks[1].Id,
+                        TicketStatusId = ticketStatuses[0].Id
+                    },
+                    new Ticket
+                    {
+                        Price = 150,
+                        FlightId = flights[0].Id,
+                        UserId = 2,
+                        RankId = ranks[2].Id,
+                        TicketStatusId = ticketStatuses[0].Id
+                    }
+                };
+
+                _context.Tickets.AddRange(tickets);
             }
 
             await _context.SaveChangesAsync();

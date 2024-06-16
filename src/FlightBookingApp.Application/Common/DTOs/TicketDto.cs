@@ -6,10 +6,12 @@ namespace FlightBookingApp.Application.Common.DTOs
     {
         public double? Price { get; set; }
 
-        public Flight? Flight { get; set; }
+        public FlightDto? Flight { get; set; }
 
-        public User? User { get; set; }
+        public UserDto? User { get; set; }
 
-        public Rank? Rank { get; set; }
+        public RankDto? Rank { get; set; }
+
+        public TicketStatusDto? TicketStatus { get; set; }
     }
 }

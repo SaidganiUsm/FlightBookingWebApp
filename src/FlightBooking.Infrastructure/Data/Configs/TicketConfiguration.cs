@@ -18,6 +18,12 @@ namespace FlightBookingApp.Infrastructure.Data.Configs
                 .HasForeignKey(t => t.FlightId)
                 .IsRequired(true);
 
+            builder.HasOne(l => l.TicketStatus)
+                .WithMany(ls => ls.Tickets)
+                .HasForeignKey(l => l.TicketStatusId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Property(l => l.Price).HasColumnType("decimal(28,2)").IsRequired(false);
 
             builder.Property(r => r.CreationDate).HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));

@@ -30,6 +30,9 @@ namespace FlightBookingApp.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BusinessTicketsAmount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
@@ -39,14 +42,23 @@ namespace FlightBookingApp.Infrastructure.Migrations
                     b.Property<int>("DestinationLocationId")
                         .HasColumnType("int");
 
+                    b.Property<int>("EconomyTicketsAmount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("FirstClassTicketsAmount")
+                        .HasColumnType("int");
 
                     b.Property<int>("FlightStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ModificationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("StandartPriceForFlight")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
@@ -154,9 +166,12 @@ namespace FlightBookingApp.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<int>("RankPriceRatio")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("TicketTypes");
+                    b.ToTable("Rank");
                 });
 
             modelBuilder.Entity("FlightBookingApp.Core.Entities.Role", b =>
@@ -212,6 +227,9 @@ namespace FlightBookingApp.Infrastructure.Migrations
                     b.Property<int>("RankId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TicketStatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -221,9 +239,35 @@ namespace FlightBookingApp.Infrastructure.Migrations
 
                     b.HasIndex("RankId");
 
+                    b.HasIndex("TicketStatusId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("FlightBookingApp.Core.Entities.TicketStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketStatuses");
                 });
 
             modelBuilder.Entity("FlightBookingApp.Core.Entities.User", b =>
@@ -471,6 +515,12 @@ namespace FlightBookingApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FlightBookingApp.Core.Entities.TicketStatus", "TicketStatus")
+                        .WithMany("Tickets")
+                        .HasForeignKey("TicketStatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FlightBookingApp.Core.Entities.User", "User")
                         .WithMany("BookedTickets")
                         .HasForeignKey("UserId")
@@ -480,6 +530,8 @@ namespace FlightBookingApp.Infrastructure.Migrations
                     b.Navigation("Flight");
 
                     b.Navigation("Rank");
+
+                    b.Navigation("TicketStatus");
 
                     b.Navigation("User");
                 });
@@ -543,6 +595,11 @@ namespace FlightBookingApp.Infrastructure.Migrations
             modelBuilder.Entity("FlightBookingApp.Core.Entities.FlightStatus", b =>
                 {
                     b.Navigation("Flights");
+                });
+
+            modelBuilder.Entity("FlightBookingApp.Core.Entities.TicketStatus", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("FlightBookingApp.Core.Entities.User", b =>

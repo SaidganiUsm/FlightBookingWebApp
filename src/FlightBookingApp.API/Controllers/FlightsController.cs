@@ -4,6 +4,7 @@ using FlightBookingApp.Application.Features.Flights.Admin.Command.Delete;
 using FlightBookingApp.Application.Features.Flights.Admin.Command.Update;
 using FlightBookingApp.Application.Features.Flights.Admin.Query.GetAll;
 using FlightBookingApp.Application.Features.Flights.Admin.Query.GetbyId;
+using FlightBookingApp.Application.Features.Flights.User.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,15 @@ namespace FlightBookingApp.API.Controllers
         {
             var command = new DeleteFlightCommand { Id = id };
             var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet("available-flights")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetFlightForUsers([FromQuery] PageRequest pageRequest)
+        {
+            var query = new GetFlightsForUserQuery { PageRequest = pageRequest };
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
     }
