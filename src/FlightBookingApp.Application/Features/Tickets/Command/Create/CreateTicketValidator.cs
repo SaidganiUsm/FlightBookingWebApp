@@ -5,6 +5,7 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
 {
     public class CreateTicketValidator : AbstractValidator<CreateTicketCommand>
     {
+		private readonly int BookingClosingInHours = -2;
         private readonly IFlightRepository _flightRepository;
 		private readonly IRankRepository _rankRepository;
 
@@ -43,6 +44,22 @@ namespace FlightBookingApp.Application.Features.Tickets.Command.Create
 					}
 				)
 				.WithMessage("Rank with this name does not exist");
-		}
+
+            RuleFor(x => x.FlightId)
+                .MustAsync(
+                    async (id, cancellationToken) =>
+                    {
+                        var flight = await _flightRepository.GetAsync(
+						   predicate: x => x.Id == id,
+						   cancellationToken: cancellationToken
+						);
+
+                        if (flight == null) return false;
+
+                        return DateTime.UtcNow < flight.StartDateTime.AddHours(BookingClosingInHours);
+                    }
+                )
+                .WithMessage("Ticket booking is closed two hours before the flight");
+        }
     }
 }
